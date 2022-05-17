@@ -4,9 +4,10 @@ drop table roles;
 drop table employee_salary;
 drop table salary;
 
---Òàáëèöà employees
+
+--Таблица employees
 --
---Ñîçäàòü òàáëèöó employees
+--Создать таблицу employees
 --- id. serial,  primary key,
 --- employee_name. Varchar(50), not null
 
@@ -15,7 +16,7 @@ create table employees(
 	employee_name varchar(50) not null
 );
 	
---Íàïîëíèòü òàáëèöó employee 70 ñòðîêàìè.
+--Наполнить таблицу employee 70 строками.
 
 do
 $$
@@ -29,9 +30,9 @@ $$;
 
 select * from employees 
 
---Òàáëèöà salary
+--Таблица salary
 --
---Ñîçäàòü òàáëèöó salary
+--Создать таблицу salary
 --- id. Serial  primary key,
 --- monthly_salary. Int, not null
 
@@ -40,7 +41,7 @@ create table salary(
 	monthly_salary int not null 
 );
 
---Íàïîëíèòü òàáëèöó salary 15 ñòðîêàìè:
+--Наполнить таблицу salary 15 строками:
 --- 1000
 --- 1100
 --- 1200
@@ -70,9 +71,9 @@ $$;
 
 select * from salary;
 
---Òàáëèöà employee_salary
+--Таблица employee_salary
 --
---Ñîçäàòü òàáëèöó employee_salary
+--Создать таблицу employee_salary
 --- id. Serial  primary key,
 --- employee_id. Int, not null, unique
 --- salary_id. Int, not null
@@ -83,12 +84,12 @@ create table employee_salary(
 	salary_id int not null 
 );
 
---Íàïîëíèòü òàáëèöó employee_salary 40 ñòðîêàìè:
---- â 10 ñòðîê èç 40 âñòàâèòü íåñóùåñòâóþùèå employee_id
+--Наполнить таблицу employee_salary 40 строками:
+--- в 10 строк из 40 вставить несуществующие employee_id
 do 
 $$ 
 begin 
-	-- çàïîëíÿåì ñóùåñòâóþùèìè id
+	-- заполняем существующими id
 	for i in 1..30 loop 
 	insert into employee_salary (employee_id, salary_id)
 	values 
@@ -98,7 +99,7 @@ begin
 			limit 1), 
 		(select id from salary order by random() limit 1));
 	end loop;
-	-- çàïîëíÿåì íåñóùåñòâóþùèìè id
+	-- заполняем несуществующими id
 	for j in 101..110 loop 
 	insert into employee_salary (employee_id, salary_id)
 	values 
@@ -111,9 +112,9 @@ $$;
 
 select * from employee_salary;
 
---Òàáëèöà roles
+--Таблица roles
 --
---Ñîçäàòü òàáëèöó roles
+--Создать таблицу roles
 --- id. Serial  primary key,
 --- role_name. int, not null, unique
 
@@ -122,12 +123,12 @@ create table roles(
 	role_name int not null unique
 );
 
---Ïîìåíÿòü òèï ñòîëáà role_name ñ int íà varchar(30)
+--Поменять тип столба role_name с int на varchar(30)
 
 alter table roles
 alter column role_name type varchar(30);
 
---Íàïîëíèòü òàáëèöó roles 20 ñòðîêàìè
+--Наполнить таблицу roles 20 строками
 
 insert into roles (role_name)
 values ('Junior Python developer'),
@@ -154,12 +155,12 @@ values ('Junior Python developer'),
 
 select * from roles;
 
---Òàáëèöà roles_employee
+--Таблица roles_employee
 --
---Ñîçäàòü òàáëèöó roles_employee
+--Создать таблицу roles_employee
 --- id. Serial  primary key,
---- employee_id. Int, not null, unique (âíåøíèé êëþ÷ äëÿ òàáëèöû employees, ïîëå id)
---- role_id. Int, not null (âíåøíèé êëþ÷ äëÿ òàáëèöû roles, ïîëå id)
+--- employee_id. Int, not null, unique (внешний ключ для таблицы employees, поле id)
+--- role_id. Int, not null (внешний ключ для таблицы roles, поле id)
 
 create table roles_employee(
 	id serial primary key,
@@ -167,7 +168,7 @@ create table roles_employee(
 	role_id int not null references roles (id)
 );
 
---Íàïîëíèòü òàáëèöó roles_employee 40 ñòðîêàìè
+--Наполнить таблицу roles_employee 40 строками
 
 do 
 $$
@@ -184,3 +185,4 @@ end
 $$
 
 select * from roles_employee;
+
